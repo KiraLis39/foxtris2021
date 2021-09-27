@@ -9,11 +9,10 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.ResManager;
 import gui.GameFrame;
 import gui.GameFrame.KeyLabel;
 import registry.Registry;
@@ -77,7 +76,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				
 				float spacing = GameFrame.fontIncreaseMod * 2f;
-				float headerAlign = (float) (getWidth() / 2 - Registry.ffb.getStringBounds(g2D, "Управление:").getWidth() / 2D);
+				float headerAlign = (float) (getWidth() / 2 - FoxFontBuilder.getStringBounds(g2D, "Управление:").getWidth() / 2D);
 				
 				g2D.drawString("Управление:", headerAlign, spacing * 13f);
 				g2D.drawString("_________________", headerAlign, spacing * 14f);
@@ -139,7 +138,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				g2D.setColor(Color.BLACK);
 				
-				headerAlign = (float) (getWidth() / 2 - Registry.ffb.getStringBounds(g2D, "Информация:").getWidth() / 2D);
+				headerAlign = (float) (getWidth() / 2 - FoxFontBuilder.getStringBounds(g2D, "Информация:").getWidth() / 2D);
 				
 				g2D.drawString("Информация:", headerAlign, spacing * 114f);
 				g2D.drawString("__________________", headerAlign, spacing * 115f);
@@ -238,14 +237,14 @@ public class RightPanel extends JPanel {
 	}
 
 	public static void rebuildFonts() {
-		Registry.simpleFontB = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
-		Registry.simpleFont = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
+		Registry.simpleFontB = FoxFontBuilder.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
+		Registry.simpleFont = FoxFontBuilder.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
 	}
 
 	private void prepareBaseImageBuffers() {
 		try {			
-			lifeHeartImage				= ResourceManager.getBufferedImage("life", true, MainClass.getGraphicConfig());
-			bonusKristalImage		= ResourceManager.getBufferedImage("bonus", true, MainClass.getGraphicConfig());
+			lifeHeartImage		= ResManager.getBImage("life", true, MainClass.getGraphicConfig());
+			bonusKristalImage	= ResManager.getBImage("bonus", true, MainClass.getGraphicConfig());
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	

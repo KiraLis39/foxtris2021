@@ -17,17 +17,15 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.InputAction;
-import fox.adds.Out;
-import fox.builders.ResourceManager;
+import fox.IOM;
+import fox.InputAction;
+import fox.Out;
+import fox.ResManager;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
 import registry.Registry;
@@ -56,7 +54,6 @@ public class GameFrame extends JFrame {
 	private static ExecutorService tickPool;
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 	public static VolatileImage wallpaper;
-	private static InputAction inAc = new InputAction();
 	
 	private static Boolean gameIsActive = false, hardMode = false, lightMode = false, initializated = false, useBackImage = true, speedUp = false;
 	private static Boolean paused = false, fullscreen = false, autoMelodyChange = true;
@@ -99,7 +96,7 @@ public class GameFrame extends JFrame {
 		// prepare to building GUI:
 		Out.Print(GameFrame.class, 0, "Building the GameFrame...");
 		gameGUIframe.setTitle("Foxtris 2019 " + Registry.verse);
-		try {gameGUIframe.setIconImage(ResourceManager.getBufferedImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
+		try {gameGUIframe.setIconImage(ResManager.getBImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
 		gameGUIframe.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gameGUIframe.setResizable(false);
 		
@@ -151,26 +148,23 @@ public class GameFrame extends JFrame {
 		was = System.currentTimeMillis();
 		
 		tickPool = Executors.newSingleThreadExecutor();
-		tickPool.execute(new Runnable() {
-			@Override
-			public void run() {
-				Out.Print(GameFrame.class, 0, "Launch the tick-Pool...");
+		tickPool.execute(() -> {
+			Out.Print(GameFrame.class, 0, "Launch the tick-Pool...");
 
-				while (gameIsActive) {
-					try {
-						tick();
-	
-						if (!CenterPanel.isAnimationOn()) {
-							try {
-								if (lightMode) {Thread.sleep(deltaTime * 2);
-								} else if (hardMode) {Thread.sleep(deltaTime / 2);
-								} else if (speedUp) {Thread.sleep(deltaTime / 10);
-								} else {Thread.sleep(deltaTime);}
-							} catch (Exception e) {/* IGNORE */}
-						} else {Thread.sleep(34);}
-					} catch (InterruptedException e) {e.printStackTrace();}
-				}
-			}			
+			while (gameIsActive) {
+				try {
+					tick();
+
+					if (!CenterPanel.isAnimationOn()) {
+						try {
+							if (lightMode) {Thread.sleep(deltaTime * 2);
+							} else if (hardMode) {Thread.sleep(deltaTime / 2);
+							} else if (speedUp) {Thread.sleep(deltaTime / 10);
+							} else {Thread.sleep(deltaTime);}
+						} catch (Exception e) {/* IGNORE */}
+					} else {Thread.sleep(34);}
+				} catch (InterruptedException e) {e.printStackTrace();}
+			}
 		});
 		tickPool.shutdown();
 		
@@ -286,57 +280,57 @@ public class GameFrame extends JFrame {
 	
 	private static void reloadThemeResourse(String themeName) {
 		try {
-			ResourceManager.add("theme", 				new File("./resourse/pictures/themes/" + themeName + "/theme.png"), true);
-			ResourceManager.add("proto", 				new File("./resourse/pictures/themes/" + themeName + "/proto.png"), true);
-			ResourceManager.add("NoneOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/noneOne.png"), true);
-			ResourceManager.add("GreenOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/greenOne.png"), true);
-			ResourceManager.add("OrangeOneBrick",new File("./resourse/pictures/themes/" + themeName + "/orangeOne.png"), true);
-			ResourceManager.add("PurpleOneBrick", new File("./resourse/pictures/themes/" + themeName + "/purpleOne.png"), true);
-			ResourceManager.add("YellowOneBrick",	new File("./resourse/pictures/themes/" + themeName + "/yellowOne.png"), true);
-			ResourceManager.add("BlueOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blueOne.png"), true);
-			ResourceManager.add("RedOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/redOne.png"), true);
-			ResourceManager.add("BlackOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blackOne.png"), true);
+			ResManager.add("theme", 				new File("./resourse/pictures/themes/" + themeName + "/theme.png"), true);
+			ResManager.add("proto", 				new File("./resourse/pictures/themes/" + themeName + "/proto.png"), true);
+			ResManager.add("NoneOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/noneOne.png"), true);
+			ResManager.add("GreenOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/greenOne.png"), true);
+			ResManager.add("OrangeOneBrick",new File("./resourse/pictures/themes/" + themeName + "/orangeOne.png"), true);
+			ResManager.add("PurpleOneBrick", new File("./resourse/pictures/themes/" + themeName + "/purpleOne.png"), true);
+			ResManager.add("YellowOneBrick",	new File("./resourse/pictures/themes/" + themeName + "/yellowOne.png"), true);
+			ResManager.add("BlueOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blueOne.png"), true);
+			ResManager.add("RedOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/redOne.png"), true);
+			ResManager.add("BlackOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blackOne.png"), true);
 			
-			CenterPanel.proto 					= ResourceManager.getBufferedImage("proto", true, MainClass.getGraphicConfig());
-			CenterPanel.NoneOneBrick 		= ResourceManager.getBufferedImage("NoneOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.GreenOneBrick 		= ResourceManager.getBufferedImage("GreenOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.OrangeOneBrick 	= ResourceManager.getBufferedImage("OrangeOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.PurpleOneBrick 		= ResourceManager.getBufferedImage("PurpleOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.YellowOneBrick		= ResourceManager.getBufferedImage("YellowOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.BlueOneBrick 		= ResourceManager.getBufferedImage("BlueOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.RedOneBrick 			= ResourceManager.getBufferedImage("RedOneBrick", true, MainClass.getGraphicConfig());
-			CenterPanel.BlackOneBrick 		= ResourceManager.getBufferedImage("BlackOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.proto 				= ResManager.getBImage("proto", true, MainClass.getGraphicConfig());
+			CenterPanel.NoneOneBrick 		= ResManager.getBImage("NoneOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.GreenOneBrick 		= ResManager.getBImage("GreenOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.OrangeOneBrick 		= ResManager.getBImage("OrangeOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.PurpleOneBrick 		= ResManager.getBImage("PurpleOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.YellowOneBrick		= ResManager.getBImage("YellowOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.BlueOneBrick 		= ResManager.getBImage("BlueOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.RedOneBrick 		= ResManager.getBImage("RedOneBrick", true, MainClass.getGraphicConfig());
+			CenterPanel.BlackOneBrick 		= ResManager.getBImage("BlackOneBrick", true, MainClass.getGraphicConfig());
 			
 			FoxAudioProcessor.addSound("spawnSound", 		new File("./resourse/sounds/" + themeName + "/spawnSound.mp3"));
 			FoxAudioProcessor.addSound("roundSound", 		new File("./resourse/sounds/" + themeName + "/roundSound.mp3"));
 			FoxAudioProcessor.addSound("stuckSound", 		new File("./resourse/sounds/" + themeName + "/stuckSound.mp3"));
-			FoxAudioProcessor.addSound("fullineSound", 		new File("./resourse/sounds/" + themeName + "/fullineSound.mp3"));
-			FoxAudioProcessor.addSound("loseSound", 			new File("./resourse/sounds/" + themeName + "/loseSound.mp3"));
-			FoxAudioProcessor.addSound("winSound", 			new File("./resourse/sounds/" + themeName + "/winSound.mp3"));
-			FoxAudioProcessor.addSound("achiveSound", 		new File("./resourse/sounds/" + themeName + "/achiveSound.mp3"));
-			FoxAudioProcessor.addSound("tipSound", 			new File("./resourse/sounds/" + themeName + "/tipSound.mp3"));
+			FoxAudioProcessor.addSound("fullineSound", 	new File("./resourse/sounds/" + themeName + "/fullineSound.mp3"));
+			FoxAudioProcessor.addSound("loseSound", 		new File("./resourse/sounds/" + themeName + "/loseSound.mp3"));
+			FoxAudioProcessor.addSound("winSound", 		new File("./resourse/sounds/" + themeName + "/winSound.mp3"));
+			FoxAudioProcessor.addSound("achiveSound", 	new File("./resourse/sounds/" + themeName + "/achiveSound.mp3"));
+			FoxAudioProcessor.addSound("tipSound", 		new File("./resourse/sounds/" + themeName + "/tipSound.mp3"));
 			FoxAudioProcessor.addSound("warnSound", 		new File("./resourse/sounds/" + themeName + "/warnSound.mp3"));
 		} catch (Exception e) {e.printStackTrace();
 		} finally {reloadWallpaper();}
 	}
 	
 	private static void reinitializateControlKeys() {
-		if (inAc != null) {inAc.clearAll();}
+		InputAction.clearAll();
 		
-		KEY_LEFT[0] 				= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT");
-		KEY_LEFT[1] 				= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT_MOD");
+		KEY_LEFT[0] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT");
+		KEY_LEFT[1] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT_MOD");
 		
 		KEY_RIGHT[0] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT");
-		KEY_RIGHT[1] 				= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT_MOD");
+		KEY_RIGHT[1] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT_MOD");
 		
 		KEY_DOWN[0] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN");
-		KEY_DOWN[1] 				= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN_MOD");
+		KEY_DOWN[1] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN_MOD");
 		
 		KEY_STUCK[0] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK");
 		KEY_STUCK[1] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK_MOD");
 		
-		KEY_PAUSE[0]		 		= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE");
-		KEY_PAUSE[1]		 		= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE_MOD");
+		KEY_PAUSE[0]		 	= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE");
+		KEY_PAUSE[1]		 	= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE_MOD");
 		
 		KEY_ROTATE[0] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE");
 		KEY_ROTATE[1] 			= IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE_MOD");
@@ -349,50 +343,50 @@ public class GameFrame extends JFrame {
 	}
 	
 	private static void inputActionCharger() {
-		inAc.add("gameframe", gameGUIframe);
-		inAc.set("gameframe", "arrowLeft", 		KEY_LEFT[0], 				KEY_LEFT[1], new AbstractAction() {
+		InputAction.add("gameframe", gameGUIframe);
+		InputAction.set("gameframe", "arrowLeft", 		KEY_LEFT[0], 				KEY_LEFT[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {CenterPanel.shiftLeft();}
 		});
-		inAc.set("gameframe", "arrowRight", 	KEY_RIGHT[0], 			KEY_RIGHT[1], new AbstractAction() {
+		InputAction.set("gameframe", "arrowRight", 	KEY_RIGHT[0], 			KEY_RIGHT[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {CenterPanel.shiftRight();}
 		});
-		inAc.set("gameframe", "arrowDown", 	KEY_DOWN[0], 			KEY_DOWN[1], new AbstractAction() {
+		InputAction.set("gameframe", "arrowDown", 	KEY_DOWN[0], 			KEY_DOWN[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CenterPanel.shiftDown();
 				CenterPanel.skipOneFrame();
 			}
 		});
-		inAc.set("gameframe", "arrowUp", 		KEY_STUCK[0], 			KEY_STUCK[1], new AbstractAction() {
+		InputAction.set("gameframe", "arrowUp", 		KEY_STUCK[0], 			KEY_STUCK[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {CenterPanel.stuckToGround();}
 		});
-		inAc.set("gameframe", "rotateZ", 			KEY_ROTATE[0], 			KEY_ROTATE[1], new AbstractAction() {
+		InputAction.set("gameframe", "rotateZ", 			KEY_ROTATE[0], 			KEY_ROTATE[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {CenterPanel.onRotateFigure();}
 		});
-		inAc.set("gameframe", "fullscreen", 		KEY_FULLSCREEN[0], KEY_FULLSCREEN[1],  new AbstractAction() {
+		InputAction.set("gameframe", "fullscreen", 		KEY_FULLSCREEN[0], KEY_FULLSCREEN[1],  new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {setupGameScreen(fullscreen);}
-		});	
-		inAc.set("gameframe", "escape", 			KEY_PAUSE[0], 			KEY_PAUSE[1], new AbstractAction() {
+		});
+		InputAction.set("gameframe", "escape", 			KEY_PAUSE[0], 			KEY_PAUSE[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {setPaused(!paused);}
 		});
-		inAc.set("gameframe", "console", 			KEY_CONSOLE[0], 		KEY_CONSOLE[1], new AbstractAction() {
+		InputAction.set("gameframe", "console", 			KEY_CONSOLE[0], 		KEY_CONSOLE[1], new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 //				if(!console.isVisible()) {console.setVisible(true); console.changeInputAreaText(null);}
 			}
 		});
-		
-		inAc.set("gameframe", "altF4", 			KeyEvent.VK_F4, 			KeyEvent.ALT_DOWN_MASK, new AbstractAction() {
+
+		InputAction.set("gameframe", "altF4", 			KeyEvent.VK_F4, 			KeyEvent.ALT_DOWN_MASK, new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {exitConfirm();}
 		});
-		inAc.set("gameframe", "f1", 					KeyEvent.VK_F1, 			0, new AbstractAction() {
+		InputAction.set("gameframe", "f1", 					KeyEvent.VK_F1, 			0, new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FoxAudioProcessor.playSound("clickSound", 3D);
@@ -405,11 +399,11 @@ public class GameFrame extends JFrame {
 				setPaused(false);
 			}
 		});
-		inAc.set("gameframe", "victoryN", 		KeyEvent.VK_N, 			0, new AbstractAction() {
+		InputAction.set("gameframe", "victoryN", 		KeyEvent.VK_N, 			0, new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {nextLevel();}
 		});
-		inAc.set("gameframe", "failNewH", 		KeyEvent.VK_H, 			0, new AbstractAction() {
+		InputAction.set("gameframe", "failNewH", 		KeyEvent.VK_H, 			0, new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (CenterPanel.isGameOver()) {
@@ -444,7 +438,7 @@ public class GameFrame extends JFrame {
 		try {
 			Out.Print("GameFrame: reloadWallpaper: Create the wallpaper...");
 			wallpaper = MainClass.getGraphicConfig().createCompatibleVolatileImage(screenDimension.width, screenDimension.height);
-			Image imIc = ResourceManager.getBufferedImage("theme");
+			Image imIc = ResManager.getBImage("theme");
 			float imageWidth = imIc.getWidth(null), imageHeight = imIc.getHeight(null);
 			float realFrameHeigthMinus = isFullscreen() ? 10f : 100f;
 			float sideShift = (float) ((imageWidth - getGameFrameSize().getWidth()) / 6f);
@@ -511,8 +505,8 @@ public class GameFrame extends JFrame {
 	
 	private static void restartGame() {
 		gameIsActive = false;
-		
-		inAc.clearAll();
+
+		InputAction.clearAll();
 		
 		gameGUIframe.dispose();
 		
@@ -549,8 +543,8 @@ public class GameFrame extends JFrame {
 	private static void exit() {
 		Out.Print(GameFrame.class, 1, "De-initialization...");
 		gameIsActive = false;
-		
-		inAc.clearAll();
+
+		InputAction.clearAll();
 		tickPool.shutdownNow();
 		gameGUIframe.dispose();
 		

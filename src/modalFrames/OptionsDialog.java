@@ -15,17 +15,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-import fox.games.FoxSpritesCombiner;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
 import gui.GameFrame;
+import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import subPanels.CenterPanel;
 
@@ -35,10 +34,8 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 	private MouseMotionListener mmList;
 	private MouseListener mList;
 	private KeyListener kList;
-	
-	private FoxFontBuilder ffb = new FoxFontBuilder();
-	private Font f0 = ffb.setFoxFont(0, 24, true), f1 = ffb.setFoxFont(0, 16, false);
-	private FoxSpritesCombiner unibuttons = new FoxSpritesCombiner();
+
+	private Font f0 = FoxFontBuilder.setFoxFont(0, 24, true), f1 = FoxFontBuilder.setFoxFont(0, 16, false);
 	private FontMetrics fm;
 	private BufferedImage[] sp;
 	private BufferedImage[] detailsBuffer = new BufferedImage[2];
@@ -53,15 +50,15 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 		
 		Out.Print(OptionsDialog.class, 0, "Building the OptionsDialog...");
 		
-		try {sp = unibuttons.addSpritelist("uni", ResourceManager.getBufferedImage("unibutton"), 3, 1);
+		try {sp = FoxSpritesCombiner.addSpritelist("uni", ResManager.getBImage("unibutton"), 3, 1);
 		} catch (Exception e) {e.printStackTrace();}
 		mmList = this;
 		mList = this;
 		kList = this;
 		
 		try {
-			detailsBuffer[0] = ResourceManager.getBufferedImage("switchOn");
-			detailsBuffer[1] = ResourceManager.getBufferedImage("switchOff");
+			detailsBuffer[0] = ResManager.getBImage("switchOn");
+			detailsBuffer[1] = ResManager.getBImage("switchOff");
 		} catch (Exception e1) {e1.printStackTrace();}
 		
 		d2DRender = new RenderingHints(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
@@ -72,7 +69,7 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 //		d2DRender.add(new RenderingHints(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE));
 		
 		setTitle("Окно настроек:");
-		try {setIconImage(ResourceManager.getBufferedImage("gameIcon"));
+		try {setIconImage(ResManager.getBImage("gameIcon"));
 		} catch (Exception e) {e.printStackTrace();}
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
@@ -207,7 +204,6 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
-			ffb = null;
 			mList = null;
 			kList = null;
 			dispose();

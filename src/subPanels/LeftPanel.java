@@ -14,17 +14,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-import fox.games.FoxSpritesCombiner;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
 import gui.GameFrame;
+import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
 import modalFrames.OptionsDialog;
@@ -33,8 +31,6 @@ import registry.Registry;
 
 @SuppressWarnings("serial")
 public class LeftPanel extends JPanel implements MouseListener {
-	private FoxSpritesCombiner sprites = new FoxSpritesCombiner();
-	
 	private BufferedImage hardcoreBufferIco, hardcoreBufferIco_off, specialBufferIco, specialBufferIco_off, nextBufferIco, nextBufferIco_off, 
 		lightModeIco, lightModeIco_off, autoMusicChangeIco, autoMusicChangeIco_off;
 	private BufferedImage buttonBufferIm, buttonOverBufferIm, buttonPressBufferIm, leftGrayBase, stage;
@@ -66,8 +62,8 @@ public class LeftPanel extends JPanel implements MouseListener {
 	}
 	
 	private void rebuildFonts() {
-		Registry.simpleFontB = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
-		Registry.simpleFont = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
+		Registry.simpleFontB = FoxFontBuilder.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
+		Registry.simpleFont = FoxFontBuilder.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
 	}
 	
 	public LeftPanel() {
@@ -247,17 +243,14 @@ public class LeftPanel extends JPanel implements MouseListener {
 						setFocusPainted(false);
 						setFocusable(false);
 						addMouseListener(LeftPanel.this);
-						addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								FoxAudioProcessor.playSound("clickSound", 3D);
-								
-								new OptionsDialog(GameFrame.getFrame()).setVisible(true);
+						addActionListener(e -> {
+							FoxAudioProcessor.playSound("clickSound", 3D);
 
-								Out.Print("Out of pause...");
-								GameFrame.setPaused(false);
-								IOM.saveAll();
-							}
+							new OptionsDialog(GameFrame.getFrame()).setVisible(true);
+
+							Out.Print("Out of pause...");
+							GameFrame.setPaused(false);
+							IOM.saveAll();
 						});
 					}
 				};
@@ -327,7 +320,7 @@ public class LeftPanel extends JPanel implements MouseListener {
 	}
 	
 	private void initializateLeftPanel() {
-		try {sp = sprites.addSpritelist("numbers", ResourceManager.getBufferedImage("numbers", true, MainClass.getGraphicConfig()), 10, 1);
+		try {sp = FoxSpritesCombiner.addSpritelist("numbers", ResManager.getBImage("numbers", true, MainClass.getGraphicConfig()), 10, 1);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		grayRectangleReDraw();
@@ -337,25 +330,25 @@ public class LeftPanel extends JPanel implements MouseListener {
 
 	private void prepareBaseImageBuffers() {
 		try {
-			stage							= ResourceManager.getBufferedImage("stageLabel", true, MainClass.getGraphicConfig());
-			buttonBufferIm 			= ResourceManager.getBufferedImage("buttonProto", true, MainClass.getGraphicConfig());
-			buttonOverBufferIm 		= ResourceManager.getBufferedImage("buttonProtoOver", true, MainClass.getGraphicConfig());
-			buttonPressBufferIm		= ResourceManager.getBufferedImage("buttonProtoPress", true, MainClass.getGraphicConfig());
+			stage					= ResManager.getBImage("stageLabel", true, MainClass.getGraphicConfig());
+			buttonBufferIm 			= ResManager.getBImage("buttonProto", true, MainClass.getGraphicConfig());
+			buttonOverBufferIm 		= ResManager.getBImage("buttonProtoOver", true, MainClass.getGraphicConfig());
+			buttonPressBufferIm		= ResManager.getBImage("buttonProtoPress", true, MainClass.getGraphicConfig());
 			
-			hardcoreBufferIco 		= ResourceManager.getBufferedImage("hardcore", true, MainClass.getGraphicConfig());
-			hardcoreBufferIco_off 	= ResourceManager.getBufferedImage("hardcore_off", true, MainClass.getGraphicConfig());
+			hardcoreBufferIco 		= ResManager.getBImage("hardcore", true, MainClass.getGraphicConfig());
+			hardcoreBufferIco_off 	= ResManager.getBImage("hardcore_off", true, MainClass.getGraphicConfig());
 			
-			specialBufferIco 			= ResourceManager.getBufferedImage("spec", true, MainClass.getGraphicConfig());
-			specialBufferIco_off 		= ResourceManager.getBufferedImage("spec_off", true, MainClass.getGraphicConfig());
+			specialBufferIco 		= ResManager.getBImage("spec", true, MainClass.getGraphicConfig());
+			specialBufferIco_off 	= ResManager.getBImage("spec_off", true, MainClass.getGraphicConfig());
 			
-			nextBufferIco 				= ResourceManager.getBufferedImage("tips", true, MainClass.getGraphicConfig());
-			nextBufferIco_off 		= ResourceManager.getBufferedImage("tips_off", true, MainClass.getGraphicConfig());
+			nextBufferIco 			= ResManager.getBImage("tips", true, MainClass.getGraphicConfig());
+			nextBufferIco_off 		= ResManager.getBImage("tips_off", true, MainClass.getGraphicConfig());
 			
-			lightModeIco 				= ResourceManager.getBufferedImage("lightcore", true, MainClass.getGraphicConfig());
-			lightModeIco_off 			= ResourceManager.getBufferedImage("lightcore_off", true, MainClass.getGraphicConfig());
+			lightModeIco 			= ResManager.getBImage("lightcore", true, MainClass.getGraphicConfig());
+			lightModeIco_off 		= ResManager.getBImage("lightcore_off", true, MainClass.getGraphicConfig());
 			
-			autoMusicChangeIco 	= ResourceManager.getBufferedImage("autoMusic", true, MainClass.getGraphicConfig());
-			autoMusicChangeIco_off = ResourceManager.getBufferedImage("autoMusic_off", true, MainClass.getGraphicConfig());
+			autoMusicChangeIco 		= ResManager.getBImage("autoMusic", true, MainClass.getGraphicConfig());
+			autoMusicChangeIco_off 	= ResManager.getBImage("autoMusic_off", true, MainClass.getGraphicConfig());
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	

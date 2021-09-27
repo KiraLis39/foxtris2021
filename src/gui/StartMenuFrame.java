@@ -26,9 +26,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import door.ExitClass;
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.ResourceManager;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
+import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import modalFrames.OptionsDialog;
 import registry.Registry;
@@ -50,8 +52,8 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	private Point cursor, startButtonPaint;
 
 	private Color colorBackground = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-	private Font f0 = Registry.ffb.setFoxFont(6, 21, false);
-	private Font f1 = Registry.ffb.setFoxFont(5, 20, true);
+	private Font f0 = FoxFontBuilder.setFoxFont(6, 21, false);
+	private Font f1 = FoxFontBuilder.setFoxFont(5, 20, true);
 
 	private Thread repTh;
 
@@ -63,12 +65,12 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 
 	public StartMenuFrame(GraphicsConfiguration grConf) {
 		super(grConf);		
-		Out.Print(StartMenuFrame.class, 0, "Building the StartMenu...");		
+		Out.Print(StartMenuFrame.class, 0, "Building the StartMenu...");
 		
 		initialization();		
 		
 		setTitle("Меню игры:");
-		try {setIconImage(ResourceManager.getBufferedImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
+		try {setIconImage(ResManager.getBImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
 		setResizable(false);
 		setIgnoreRepaint(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +138,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	private void initialization() {
 		Out.Print(StartMenuFrame.class, 0, "Initialization StartMenu...");
 		
-		try {sp = Registry.sprites.addSpritelist("MainMenuButtons", ResourceManager.getBufferedImage("MBSL", true, MainClass.getGraphicConfig()), 3, 3);
+		try {sp = FoxSpritesCombiner.addSpritelist("MBSL", ResManager.getBImage("MBSL", true, MainClass.getGraphicConfig()), 3, 3);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		startButtonPaint = new Point(FRAME_WIDTH / 4, FRAME_HEIGHT / 3);
@@ -175,7 +177,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 		d2DRender.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON));
 		
 //		buffBackground = ResourceManager.getBufferedImage("mainBackground", true, MainClass.getGraphicConfig());
-		Image imIc = new ImageIcon("./resourse/pictures/mainBackground").getImage();
+		Image imIc = new ImageIcon("./resource/pictures/mainBackground").getImage();
 		background = MainClass.getGraphicConfig().createCompatibleVolatileImage(imIc.getWidth(null), imIc.getHeight(null), 2);
 		if (background.validate(MainClass.getGraphicConfig()) == VolatileImage.IMAGE_INCOMPATIBLE) {Out.Print("WARN: createBackBuffer: IMAGE_INCOMPATIBLE");}
 		

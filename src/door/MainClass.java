@@ -183,51 +183,51 @@ public class MainClass {
 		
 		try {
 			// pictures and icons (cashed):
-			remAdd("hardcore", "./resourse/pictures/icons/hardcore.png");
-			remAdd("hardcore_off", "./resourse/pictures/icons/hardcore_off.png");
+			remAdd("hardcore", "./resource/pictures/icons/hardcore.png");
+			remAdd("hardcore_off", "./resource/pictures/icons/hardcore_off.png");
 
-			remAdd("spec", "./resourse/pictures/icons/spec.png");
-			remAdd("spec_off", "./resourse/pictures/icons/spec_off.png");
+			remAdd("spec", "./resource/pictures/icons/spec.png");
+			remAdd("spec_off", "./resource/pictures/icons/spec_off.png");
 
-			remAdd("tips", "./resourse/pictures/icons/tips.png");
-			remAdd("tips_off", "./resourse/pictures/icons/tips_off.png");
+			remAdd("tips", "./resource/pictures/icons/tips.png");
+			remAdd("tips_off", "./resource/pictures/icons/tips_off.png");
 
-			remAdd("life", "./resourse/pictures/icons/life.png");
-			remAdd("bonus", "./resourse/pictures/icons/bonus.png");
+			remAdd("life", "./resource/pictures/icons/life.png");
+			remAdd("bonus", "./resource/pictures/icons/bonus.png");
 
-			remAdd("autoMusic", "./resourse/pictures/icons/autoMusic.png");
-			remAdd("autoMusic_off", "./resourse/pictures/icons/autoMusic_off.png");
+			remAdd("autoMusic", "./resource/pictures/icons/autoMusic.png");
+			remAdd("autoMusic_off", "./resource/pictures/icons/autoMusic_off.png");
 
-			remAdd("lightcore", "./resourse/pictures/icons/lightcore.png");
-			remAdd("lightcore_off", "./resourse/pictures/icons/lightcore_off.png");
+			remAdd("lightcore", "./resource/pictures/icons/lightcore.png");
+			remAdd("lightcore_off", "./resource/pictures/icons/lightcore_off.png");
 
-			remAdd("autoMusic", "./resourse/pictures/icons/autoMusic.png");
+			remAdd("autoMusic", "./resource/pictures/icons/autoMusic.png");
 
-			remAdd("gameIcon", "./resourse/pictures/gameIcon.png");
+			remAdd("gameIcon", "./resource/pictures/gameIcon");
 
-			remAdd("backAbout", "./resourse/pictures/about/000.png");
-			remAdd("starsAbout", "./resourse/pictures/about/001.png");
-			remAdd("bAbout", "./resourse/pictures/about/002.png");
+			remAdd("backAbout", "./resource/pictures/about/000");
+			remAdd("starsAbout", "./resource/pictures/about/001");
+			remAdd("bAbout", "./resource/pictures/about/002");
 
-			remAdd("buttonProto", "./resourse/pictures/buttonProto.png");
-			remAdd("buttonProtoOver", "./resourse/pictures/buttonProtoOver.png");
-			remAdd("buttonProtoPress", "./resourse/pictures/buttonProtoPress.png");
+			remAdd("buttonProto", "./resource/pictures/buttonProto");
+			remAdd("buttonProtoOver", "./resource/pictures/buttonProtoOver");
+			remAdd("buttonProtoPress", "./resource/pictures/buttonProtoPress");
 
-			remAdd("victoryImage", "./resourse/pictures/victoryImage.png");
-			remAdd("gameoverImage", "./resourse/pictures/gameoverImage.png");
-			remAdd("pauseImage", "./resourse/pictures/pauseImage.png");
-			remAdd("finalWinImage", "./resourse/pictures/finalImage.png");
+			remAdd("victoryImage", "./resource/pictures/victoryImage");
+			remAdd("gameoverImage", "./resource/pictures/gameoverImage");
+			remAdd("pauseImage", "./resource/pictures/pauseImage");
+			remAdd("finalWinImage", "./resource/pictures/finalImage");
 
-			remAdd("switchOff", "./resourse/pictures/switchOff.png");
-			remAdd("switchOn", "./resourse/pictures/switchOn.png");
-			remAdd("stageLabel", "./resourse/pictures/stage.png");
+			remAdd("switchOff", "./resource/pictures/switchOff");
+			remAdd("switchOn", "./resource/pictures/switchOn");
+			remAdd("stageLabel", "./resource/pictures/stage");
 
-			remAdd("logoFoxList", "./resourse/pictures/sprites/logoFoxList");
-			remAdd("MBSL", "./resourse/pictures/sprites/MBSL");
-			remAdd("unibutton", "./resourse/pictures/sprites/unibutton");
-			remAdd("numbers", "./resourse/pictures/sprites/numbers");
+			remAdd("logoFoxList", "./resource/pictures/sprites/logoFoxList");
+			remAdd("MBSL", "./resource/pictures/sprites/MBSL");
+			remAdd("unibutton", "./resource/pictures/sprites/unibutton");
+			remAdd("numbers", "./resource/pictures/sprites/numbers");
 
-			List<Path> musics = Files.list(Paths.get("./resourse/music")).collect(Collectors.toList());
+			List<Path> musics = Files.list(Paths.get("./resource/music")).collect(Collectors.toList());
 			for (Path file : musics) {
 				FoxAudioProcessor.addMusic(file.toFile().getName(), file.toFile());
 			}
