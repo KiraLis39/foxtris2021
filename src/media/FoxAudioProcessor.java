@@ -19,6 +19,7 @@ public class FoxAudioProcessor {
 //	private static Player musicPlayer;
 	private static AdvancedPlayer musicPlayer;
 	private static AdvancedPlayer soundPlayer;
+	private static Thread musicThread;
 	
 	private static Boolean soundEnabled = false, musicEnabled = false;
 	private static Float gVolume = 1f;
@@ -47,14 +48,15 @@ public class FoxAudioProcessor {
 		
 		if (musicMap.containsKey(trackName)) {
 			stopMusic();
-		    
-	        new Thread(() -> {
+
+			musicThread = new Thread(() -> {
 				try (InputStream fis = new FileInputStream(musicMap.get(trackName).toString())) {
 					musicPlayer = new AdvancedPlayer(fis);
 					musicPlayer.play();
 				} catch (IOException | JavaLayerException e) {e.printStackTrace();
 				} finally {musicPlayer.close();}
-			}).start();
+			});
+			musicThread.start();
 		
 			Out.Print("Media: music: the '" + trackName + "' exist into musicMap and play now...");
 		} else {Out.Print("Media: music: music '" + trackName + "' is NOT exist in the musicMap");}
@@ -84,6 +86,10 @@ public class FoxAudioProcessor {
 
 		try {
 			soundPlayer.close();
+		} catch (Exception e) {/* IGNORE */}
+
+		try {
+			musicThread.stop();
 		} catch (Exception e) {/* IGNORE */}
 	}
 	

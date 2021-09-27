@@ -18,7 +18,6 @@ import gui.GameFrame.KeyLabel;
 import registry.Registry;
 
 
-@SuppressWarnings("serial")
 public class RightPanel extends JPanel {
 	private JPanel rightInfosPane;
 	
@@ -26,10 +25,10 @@ public class RightPanel extends JPanel {
 	private String tmpSpeed;
 	private static int allLinesDestroyCounter, bonusCounter;
 	private static Color panelColor = new Color(0.3f, 0.3f, 0.3f, 0.85f);
-
+	private static String userName;
 
 	@Override
-	 public void setPreferredSize(Dimension preferredSize) {
+	public void setPreferredSize(Dimension preferredSize) {
 		super.setPreferredSize(preferredSize);
 		revalidate();
 		repaint();
@@ -38,6 +37,8 @@ public class RightPanel extends JPanel {
 	 }
 	
 	public RightPanel() {
+		userName = IOM.getString(IOM.HEADERS.LAST_USER, "lastUser");
+
 		setLayout(new BorderLayout());
 		setIgnoreRepaint(true);
 		setOpaque(false);
@@ -200,7 +201,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				g2D.drawString("Игрок:", leftShift, getHeight() - 70);
 				g2D.setFont(Registry.simpleFont);
-				g2D.drawString(IOM.getString(IOM.HEADERS.LAST_USER, "lastUser"),
+				g2D.drawString(userName,
 						84 * GameFrame.fontIncreaseMod, getHeight() - 70);				
 				
 				

@@ -10,6 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -95,7 +96,7 @@ public class GameFrame extends JFrame {
 		
 		// prepare to building GUI:
 		Out.Print(GameFrame.class, 0, "Building the GameFrame...");
-		gameGUIframe.setTitle("Foxtris 2019 " + Registry.verse);
+		gameGUIframe.setTitle("Foxtris 2021 " + Registry.verse);
 		try {gameGUIframe.setIconImage(ResManager.getBImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
 		gameGUIframe.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		gameGUIframe.setResizable(false);
@@ -133,7 +134,7 @@ public class GameFrame extends JFrame {
 				add(leftPanel, 		BorderLayout.WEST);
 				add(centerPanel, 	BorderLayout.CENTER);
 				add(rightPanel, 	BorderLayout.EAST);
-				add(downPanel, 	BorderLayout.SOUTH);
+				add(downPanel, 		BorderLayout.SOUTH);
 			}
 		};
 		add(basePane);
@@ -254,13 +255,15 @@ public class GameFrame extends JFrame {
 				
 		try {
 //			Media.pauseAllMusic4();
-			
-			if (theme.equals(THEME.TECHNO)) {reloadThemeResourse("techno");
-			} else if (theme.equals(THEME.GLASS)) {reloadThemeResourse("glass");
-			} else if (theme.equals(THEME.HOLO)) {reloadThemeResourse("holo");
-			} else if (theme.equals(THEME.OTIME)) {reloadThemeResourse("otime");
-			} else if (theme.equals(THEME.SIMPLE)) {reloadThemeResourse("simple");
-			} else if (theme.equals(THEME.ASPHALT)) {reloadThemeResourse("asphalt");}
+			String themeName = null;
+			if (theme.equals(THEME.TECHNO)) {themeName = ("techno");
+			} else if (theme.equals(THEME.GLASS)) {themeName = ("glass");
+			} else if (theme.equals(THEME.HOLO)) {themeName = ("holo");
+			} else if (theme.equals(THEME.OTIME)) {themeName = ("otime");
+			} else if (theme.equals(THEME.SIMPLE)) {themeName = ("simple");
+			} else if (theme.equals(THEME.ASPHALT)) {themeName = ("asphalt");}
+
+			reloadThemeResource(themeName);
 		} catch (Exception e) {
 			Out.Print(GameFrame.class, 3, "ERROR: ResourseManager report about: " + e.getLocalizedMessage());
 			e.printStackTrace();
@@ -278,18 +281,21 @@ public class GameFrame extends JFrame {
 		setupGameScreen(fullscreen);
 	}
 	
-	private static void reloadThemeResourse(String themeName) {
+	private static void reloadThemeResource(String themeName) {
+		if (themeName == null) {Out.Print("reloadThemeResource(): Income themeName is NULL", Out.LEVEL.ERROR, null);}
+		Out.Print("Loading Theme '" + themeName + "'...");
+
 		try {
-			ResManager.add("theme", 				new File("./resourse/pictures/themes/" + themeName + "/theme.png"), true);
-			ResManager.add("proto", 				new File("./resourse/pictures/themes/" + themeName + "/proto.png"), true);
-			ResManager.add("NoneOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/noneOne.png"), true);
-			ResManager.add("GreenOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/greenOne.png"), true);
-			ResManager.add("OrangeOneBrick",new File("./resourse/pictures/themes/" + themeName + "/orangeOne.png"), true);
-			ResManager.add("PurpleOneBrick", new File("./resourse/pictures/themes/" + themeName + "/purpleOne.png"), true);
-			ResManager.add("YellowOneBrick",	new File("./resourse/pictures/themes/" + themeName + "/yellowOne.png"), true);
-			ResManager.add("BlueOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blueOne.png"), true);
-			ResManager.add("RedOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/redOne.png"), true);
-			ResManager.add("BlackOneBrick", 	new File("./resourse/pictures/themes/" + themeName + "/blackOne.png"), true);
+			ResManager.add("theme", 			new File("./resource/pictures/themes/" + themeName + "/theme.png"), true);
+			ResManager.add("proto", 			new File("./resource/pictures/themes/" + themeName + "/proto.png"), true);
+			ResManager.add("NoneOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/noneOne.png"), true);
+			ResManager.add("GreenOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/greenOne.png"), true);
+			ResManager.add("OrangeOneBrick",	new File("./resource/pictures/themes/" + themeName + "/orangeOne.png"), true);
+			ResManager.add("PurpleOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/purpleOne.png"), true);
+			ResManager.add("YellowOneBrick",	new File("./resource/pictures/themes/" + themeName + "/yellowOne.png"), true);
+			ResManager.add("BlueOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/blueOne.png"), true);
+			ResManager.add("RedOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/redOne.png"), true);
+			ResManager.add("BlackOneBrick", 	new File("./resource/pictures/themes/" + themeName + "/blackOne.png"), true);
 			
 			CenterPanel.proto 				= ResManager.getBImage("proto", true, MainClass.getGraphicConfig());
 			CenterPanel.NoneOneBrick 		= ResManager.getBImage("NoneOneBrick", true, MainClass.getGraphicConfig());
@@ -301,15 +307,15 @@ public class GameFrame extends JFrame {
 			CenterPanel.RedOneBrick 		= ResManager.getBImage("RedOneBrick", true, MainClass.getGraphicConfig());
 			CenterPanel.BlackOneBrick 		= ResManager.getBImage("BlackOneBrick", true, MainClass.getGraphicConfig());
 			
-			FoxAudioProcessor.addSound("spawnSound", 		new File("./resourse/sounds/" + themeName + "/spawnSound.mp3"));
-			FoxAudioProcessor.addSound("roundSound", 		new File("./resourse/sounds/" + themeName + "/roundSound.mp3"));
-			FoxAudioProcessor.addSound("stuckSound", 		new File("./resourse/sounds/" + themeName + "/stuckSound.mp3"));
-			FoxAudioProcessor.addSound("fullineSound", 	new File("./resourse/sounds/" + themeName + "/fullineSound.mp3"));
-			FoxAudioProcessor.addSound("loseSound", 		new File("./resourse/sounds/" + themeName + "/loseSound.mp3"));
-			FoxAudioProcessor.addSound("winSound", 		new File("./resourse/sounds/" + themeName + "/winSound.mp3"));
-			FoxAudioProcessor.addSound("achiveSound", 	new File("./resourse/sounds/" + themeName + "/achiveSound.mp3"));
-			FoxAudioProcessor.addSound("tipSound", 		new File("./resourse/sounds/" + themeName + "/tipSound.mp3"));
-			FoxAudioProcessor.addSound("warnSound", 		new File("./resourse/sounds/" + themeName + "/warnSound.mp3"));
+			FoxAudioProcessor.addSound("spawnSound", 		new File("./resource/sounds/" + themeName + "/spawnSound.mp3"));
+			FoxAudioProcessor.addSound("roundSound", 		new File("./resource/sounds/" + themeName + "/roundSound.mp3"));
+			FoxAudioProcessor.addSound("stuckSound", 		new File("./resource/sounds/" + themeName + "/stuckSound.mp3"));
+			FoxAudioProcessor.addSound("fullineSound", 	new File("./resource/sounds/" + themeName + "/fullineSound.mp3"));
+			FoxAudioProcessor.addSound("loseSound", 		new File("./resource/sounds/" + themeName + "/loseSound.mp3"));
+			FoxAudioProcessor.addSound("winSound", 		new File("./resource/sounds/" + themeName + "/winSound.mp3"));
+			FoxAudioProcessor.addSound("achiveSound", 	new File("./resource/sounds/" + themeName + "/achiveSound.mp3"));
+			FoxAudioProcessor.addSound("tipSound", 		new File("./resource/sounds/" + themeName + "/tipSound.mp3"));
+			FoxAudioProcessor.addSound("warnSound", 		new File("./resource/sounds/" + themeName + "/warnSound.mp3"));
 		} catch (Exception e) {e.printStackTrace();
 		} finally {reloadWallpaper();}
 	}
@@ -438,8 +444,8 @@ public class GameFrame extends JFrame {
 		try {
 			Out.Print("GameFrame: reloadWallpaper: Create the wallpaper...");
 			wallpaper = MainClass.getGraphicConfig().createCompatibleVolatileImage(screenDimension.width, screenDimension.height);
-			Image imIc = ResManager.getBImage("theme");
-			float imageWidth = imIc.getWidth(null), imageHeight = imIc.getHeight(null);
+			BufferedImage imIc = ResManager.getBImage("theme");
+			float imageWidth = imIc.getWidth(), imageHeight = imIc.getHeight();
 			float realFrameHeigthMinus = isFullscreen() ? 10f : 100f;
 			float sideShift = (float) ((imageWidth - getGameFrameSize().getWidth()) / 6f);
 			float heightShift = (float) ((imageHeight - getGameFrameSize().getHeight()) / 2f);
@@ -612,8 +618,8 @@ public class GameFrame extends JFrame {
 	public static int getLifes() {return lifes;}
 
 	public static THEME getTheme() {	return theme;}
-	public static void setTheme(THEME theme2) {
-		theme = theme2;
+	public static void setTheme(THEME _theme) {
+		theme = _theme;
 		reloadTheme();
 //		new OptionsDialog(GameFrame.getFrame()).setVisible(true);
 

@@ -42,7 +42,7 @@ public class MainClass {
 	public static void main(String[] args) {
 		try {UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (Exception e) {System.err.println("Couldn't get specified look and feel, for some reason.");}
-		
+
 		grConf = grDev.getDefaultConfiguration();
 		
 		Out.Print(MainClass.class, Out.LEVEL.INFO, "Запуск программы.");
@@ -51,7 +51,7 @@ public class MainClass {
 		ResManager.setDebugOn(IOM.getBoolean(IOM.HEADERS.USER_SAVE, "ResourceManagerDebugLogEnabled"));
 		IOM.setConsoleOutOn(IOM.getBoolean(IOM.HEADERS.LAST_USER, "IOMDebugLogEnabled"));
 		Out.setEnabled(IOM.getBoolean(IOM.HEADERS.USER_SAVE, "LogEnabled(global)"));
-
+		IOM.setConsoleOutOn(true);
 		
 		if (IOM.getBoolean(IOM.HEADERS.USER_SAVE, "showStartLogo")) {
 			logoThread = new Thread(() -> {
@@ -126,7 +126,7 @@ public class MainClass {
 		Out.Print(MainClass.class, 0, "Load IOM...");
 		
 		IOM.add(IOM.HEADERS.LAST_USER, new File("./user/data"));
-		if (!IOM.getBoolean(IOM.HEADERS.LAST_USER, "lastUser")) {IOM.set(IOM.HEADERS.LAST_USER, "lastUser", "NonameUser");}
+		if (IOM.getString(IOM.HEADERS.LAST_USER, "lastUser") == null) {IOM.set(IOM.HEADERS.LAST_USER, "lastUser", "NonameUser");}
 		
 		IOM.add(IOM.HEADERS.USER_SAVE, new File("./user/" + IOM.getString(IOM.HEADERS.LAST_USER, "lastUser") + ".conf"));
 		if (!IOM.getBoolean(IOM.HEADERS.USER_SAVE, "gameTheme")) 		{IOM.set(IOM.HEADERS.USER_SAVE, "gameTheme", "HOLO");}
@@ -182,6 +182,8 @@ public class MainClass {
 		Out.Print(MainClass.class, 0, "Loading media resourses....");
 		
 		try {
+			ResManager.setDebugOn(false);
+
 			// pictures and icons (cashed):
 			remAdd("hardcore", "./resource/pictures/icons/hardcore.png");
 			remAdd("hardcore_off", "./resource/pictures/icons/hardcore_off.png");
@@ -226,6 +228,8 @@ public class MainClass {
 			remAdd("MBSL", "./resource/pictures/sprites/MBSL");
 			remAdd("unibutton", "./resource/pictures/sprites/unibutton");
 			remAdd("numbers", "./resource/pictures/sprites/numbers");
+
+			remAdd("mainBackground", "./resource/pictures/mainBackground");
 
 			List<Path> musics = Files.list(Paths.get("./resource/music")).collect(Collectors.toList());
 			for (Path file : musics) {
