@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -21,7 +20,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import door.ExitClass;
@@ -30,14 +28,13 @@ import fox.FoxFontBuilder;
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
+import gui.game.GameFrame;
 import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import modalFrames.OptionsDialog;
 import registry.Registry;
-import subPanels.CenterPanel;
+import gui.game.CenterPanel;
 
-
-@SuppressWarnings("serial")
 public class StartMenuFrame extends JFrame implements MouseListener, MouseMotionListener {
 	private final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
 	
@@ -69,7 +66,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 		
 		initialization();		
 		
-		setTitle("Меню игры:");
+		setTitle(Registry.name);
 		try {setIconImage(ResManager.getBImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
 		setResizable(false);
 		setIgnoreRepaint(true);

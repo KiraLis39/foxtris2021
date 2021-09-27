@@ -4,6 +4,7 @@ import fox.FoxFontBuilder;
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
+import gui.game.GameFrame;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -26,9 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-
-@SuppressWarnings("serial")
-public class ControlsDialog extends JDialog implements ActionListener  {	
+public class ControlsDialog extends JDialog implements ActionListener  {
 	private int DIALOG_WIDTH = 300, DIALOG_HEIGHT = 400;
 	private Font f0 = FoxFontBuilder.setFoxFont(5, 18, true);
 	private Font f1 = FoxFontBuilder.setFoxFont(5, 18, true);
@@ -37,9 +36,7 @@ public class ControlsDialog extends JDialog implements ActionListener  {
 	
 	public ControlsDialog(Dialog parent) {
 		super(parent, true);
-		
-//		try {UIManager.setLookAndFeel(new NimbusLookAndFeel());
-//		} catch (Exception e) {System.err.println("Couldn't get specified look and feel, for some reason.");}
+
 		Out.Print(ControlsDialog.class, 0, "Building the ControlsDialog...");
 		
 		setTitle("Окно управления:");
@@ -244,7 +241,8 @@ public class ControlsDialog extends JDialog implements ActionListener  {
 			IOM.saveAll();
 			pak.dispose();
 			
-			if (gui.GameFrame.isGameActive()) {gui.GameFrame.reloadControls();}
+			if (GameFrame.isGameActive()) {
+                GameFrame.reloadControls();}
 		}
 	}
 }

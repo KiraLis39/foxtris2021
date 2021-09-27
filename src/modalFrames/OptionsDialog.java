@@ -23,10 +23,10 @@ import fox.FoxFontBuilder;
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
-import gui.GameFrame;
+import gui.game.GameFrame;
 import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
-import subPanels.CenterPanel;
+import gui.game.CenterPanel;
 
 
 @SuppressWarnings("serial")
@@ -159,7 +159,7 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 				g2d.setColor(Color.GREEN);
 				g2d.drawString("Хардкор:", 20, 380);
 				
-				try {g2d.drawImage(gui.GameFrame.isHardcore() ? detailsBuffer[0] : detailsBuffer[1], 
+				try {g2d.drawImage(GameFrame.isHardcore() ? detailsBuffer[0] : detailsBuffer[1],
 						(int) (getSize().width * 0.75f), 360 - 2, 
 						70, 40, null);
 				} catch (Exception e) {e.printStackTrace();}
@@ -197,7 +197,7 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 			}
 		});
 
-		gui.GameFrame.setPaused(true);
+		GameFrame.setPaused(true);
 	}
 
 

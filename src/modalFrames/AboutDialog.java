@@ -20,8 +20,6 @@ import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import registry.Registry;
 
-
-@SuppressWarnings("serial")
 public class AboutDialog extends JDialog implements KeyListener {
 	private KeyListener kList;
 	
@@ -49,8 +47,8 @@ public class AboutDialog extends JDialog implements KeyListener {
 	String tmp3 = "Графика: KiraLis39 и интернет";
 	String tmp4 = "Музыка: KiraLis39 и KeyGen";
 	String tmp5 = "Тестирование: @FoxGroup";
-	String tmp6 = "2019 год";
-	String tmp7 = "Multiverse_39 Corp.";
+	String tmp6 = "2021 год";
+	String tmp7 = "Multiverse_39.";
 	String tmp9 = "Alt + F4 - меню выхода;";
 	String tmp13 = "F1 - справка Об игре.";
 	
@@ -210,8 +208,6 @@ public class AboutDialog extends JDialog implements KeyListener {
 			}
 		});
 		backAniThread.start();
-		
-//		Media.nextMusicPlay();
 	}
 
 	private int getRandomFigure() {return new Random().nextInt(4);}
