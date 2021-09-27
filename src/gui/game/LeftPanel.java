@@ -386,29 +386,22 @@ public class LeftPanel extends JPanel implements MouseListener {
 				g2D.drawString(buttonText, 
 						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
 						button.getHeight() / 2 + 4 + y);
-			} else if (over) {
-				g2D.drawImage(buttonOverBufferIm, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);			
-				g2D.setColor(Color.DARK_GRAY);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2), 
-						button.getHeight() / 2 + 2 + y);
-				
-				g2D.setColor(Color.WHITE);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
-						button.getHeight() / 2 + 4 + y
-				);
 			} else {
-				g2D.drawImage(buttonBufferIm, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);				
-				g2D.setColor(Color.DARK_GRAY);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2), 
+				BufferedImage bdi = buttonBufferIm;
+				if (over) {
+					bdi = buttonOverBufferIm;
+				}
+
+				g2D.drawImage(bdi, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);
+				g2D.setColor(Color.DARK_GRAY);
+				g2D.drawString(buttonText,
+						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2),
 						button.getHeight() / 2 + 2 + y);
-				
-				g2D.setColor(Color.WHITE);				
+
+				g2D.setColor(Color.WHITE);
 				g2D.drawString(
-						buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
+						buttonText,
+						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2),
 						button.getHeight() / 2 + 4 + y
 				);
 			}
@@ -478,9 +471,8 @@ public class LeftPanel extends JPanel implements MouseListener {
 	}
 	public void mouseClicked(MouseEvent e) {}
 
-	public void setNextbrickDim(int nbd) {
+	public void setNextBrickDim(int nbd) {
 		nextbrickDim = nbd;
-		
 		leftNFigurePane.repaint();
 	}
 }

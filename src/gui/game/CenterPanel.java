@@ -558,24 +558,21 @@ public class CenterPanel extends JPanel {
 	private static void checkLines() {
 		int line = 0, column = 0;
 		ExecutorService aniPool = Executors.newFixedThreadPool(1);
-		Runnable rn = new Runnable() {
-			@Override
-			public void run() {
-				try {while (!aniPool.awaitTermination(30, TimeUnit.MILLISECONDS)) {GameFrame.basePane.repaint();}} catch (InterruptedException e) {e.printStackTrace();}
-				
-				//bonus check:
-				if (linesDestroy >= 3) {
-					RightPanel.bonusCounterAdd();
-					FoxAudioProcessor.playSound("achiveSound", 0.5D);
-					balls += 10;
-					bonusAchieved = true;
-					powerfullDamageBonus = true;
-				}
-				
-				animationOn = false;
-				cleanFieldCheck();
-				checkWin();
+		Runnable rn = () -> {
+			try {while (!aniPool.awaitTermination(30, TimeUnit.MILLISECONDS)) {GameFrame.basePane.repaint();}} catch (InterruptedException e) {e.printStackTrace();}
+
+			//bonus check:
+			if (linesDestroy >= 3) {
+				RightPanel.bonusCounterAdd();
+				FoxAudioProcessor.playSound("achiveSound", 0.5D);
+				balls += 10;
+				bonusAchieved = true;
+				powerfullDamageBonus = true;
 			}
+
+			animationOn = false;
+			cleanFieldCheck();
+			checkWin();
 		};
 		linesDestroy = 0;
 		fullLineCheck = 0;

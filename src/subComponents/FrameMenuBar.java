@@ -1,4 +1,4 @@
-package menu;
+package subComponents;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;

@@ -27,7 +27,8 @@ import gui.StartMenuFrame;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
 import registry.Registry;
-import menu.FrameMenuBar;
+import subComponents.DownPanel;
+import subComponents.FrameMenuBar;
 
 
 @SuppressWarnings("serial")
@@ -218,7 +219,7 @@ public class GameFrame extends JFrame {
 		// set size of NextBrickViewer:
 		int nextBreakViewSize = CenterPanel.brickDim + 15;
 		while (nextBreakViewSize * 3 + 15 >= panelsLeftAndRightWidth) {nextBreakViewSize -= 2;}
-		leftPanel.setNextbrickDim(nextBreakViewSize);
+		leftPanel.setNextBrickDim(nextBreakViewSize);
 		
 		// set frame back to visible:
 		gameGUIframe.setExtendedState(isFullscreen ? JFrame.MAXIMIZED_BOTH : JFrame.NORMAL);

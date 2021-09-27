@@ -19,7 +19,7 @@ import registry.Registry;
 public class RightPanel extends JPanel {
 	private JPanel rightInfosPane;
 	
-	private static BufferedImage rightGrayBase, lifeHeartImage, bonusKristalImage;
+	private BufferedImage rightGrayBase, lifeHeartImage, bonusKristalImage;
 	private String tmpSpeed;
 	private static int allLinesDestroyCounter, bonusCounter;
 	private static Color panelColor = new Color(0.3f, 0.3f, 0.3f, 0.85f);
