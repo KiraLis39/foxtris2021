@@ -1,4 +1,4 @@
-package modalFrames;
+package subComponents;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,10 +23,11 @@ import fox.FoxFontBuilder;
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
+import gui.game.CenterPanel;
 import gui.game.GameFrame;
 import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
-import gui.game.CenterPanel;
+import modalFrames.ControlsDialog;
 
 
 @SuppressWarnings("serial")
@@ -137,7 +138,7 @@ public class OptionsDialog extends JDialog implements MouseListener, KeyListener
 				g2d.setColor(Color.GREEN);
 				g2d.drawString("Следующая фигура:", 20, 230);
 
-				try {g2d.drawImage(CenterPanel.isShowNextBlockEnabledFlag() ? detailsBuffer[0] : detailsBuffer[1], 
+				try {g2d.drawImage(CenterPanel.isShowNextBlockEnabledFlag() ? detailsBuffer[0] : detailsBuffer[1],
 						(int) (getSize().width * 0.75f), 210 - 2, 
 						70, 40, null);
 				} catch (Exception e) {e.printStackTrace();}

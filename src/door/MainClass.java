@@ -20,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
@@ -80,7 +79,7 @@ public class MainClass {
 		logoFrame.setBackground(new Color(0,0,0,0));
 		logoFrame.setOpacity(frameOpacity);
 
-		try {im = new ImageIcon("./resourse/pictures/logo0").getImage();
+		try {im = new ImageIcon("./resource/pictures/logo0").getImage();
 		} catch (Exception e) {
 			Out.Print(MainClass.class, 3, "ERROR: Logo image not ready.");
 			e.printStackTrace();

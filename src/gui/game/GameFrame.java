@@ -27,7 +27,6 @@ import gui.StartMenuFrame;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
 import registry.Registry;
-import subComponents.DownPanel;
 import subComponents.FrameMenuBar;
 
 

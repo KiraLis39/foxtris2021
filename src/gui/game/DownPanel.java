@@ -1,4 +1,4 @@
-package subComponents;
+package gui.game;
 
 import java.awt.Color;
 import javax.swing.JLabel;

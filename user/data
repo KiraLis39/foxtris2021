@@ -1,6 +1,6 @@
 #IOM_SAVE
-#Mon Sep 27 17:35:09 MSK 2021
-propFile=./user/data
+#Mon Sep 27 18:43:40 MSK 2021
+propFile=.\\user\\data
 lastUser=123
 IOMDebugLogEnabled=false
 propName=LAST_USER

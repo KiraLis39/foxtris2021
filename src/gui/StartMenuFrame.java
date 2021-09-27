@@ -28,12 +28,13 @@ import fox.FoxFontBuilder;
 import fox.IOM;
 import fox.Out;
 import fox.ResManager;
+import gui.game.CenterPanel;
 import gui.game.GameFrame;
 import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
-import modalFrames.OptionsDialog;
 import registry.Registry;
-import gui.game.CenterPanel;
+import subComponents.OptionsDialog;
+
 
 public class StartMenuFrame extends JFrame implements MouseListener, MouseMotionListener {
 	private final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;

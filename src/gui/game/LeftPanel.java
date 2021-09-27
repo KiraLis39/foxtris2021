@@ -23,8 +23,9 @@ import fox.ResManager;
 import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
-import modalFrames.OptionsDialog;
 import registry.Registry;
+import subComponents.OptionsDialog;
+
 
 public class LeftPanel extends JPanel implements MouseListener {
 	private BufferedImage hardcoreBufferIco, hardcoreBufferIco_off, specialBufferIco, specialBufferIco_off, nextBufferIco;
