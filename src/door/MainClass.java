@@ -65,7 +65,7 @@ public class MainClass {
 
 		if (logoThread != null) {while (logoThread.isAlive()) {try {logoThread.join();} catch (InterruptedException e) {e.printStackTrace();}}}
 		
-		Out.Print(MainClass.class, 0, "Launch the StartMenu...");
+		Out.Print(MainClass.class, Out.LEVEL.DEBUG, "Launch the StartMenu...");
 		new StartMenuFrame(grConf);
 	}
 

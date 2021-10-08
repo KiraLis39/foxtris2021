@@ -29,8 +29,6 @@ import modalFrames.AboutDialog;
 import registry.Registry;
 import subComponents.FrameMenuBar;
 
-
-@SuppressWarnings("serial")
 public class GameFrame extends JFrame {
 	public enum THEME  {TECHNO, GLASS, HOLO, OTIME, SIMPLE, ASPHALT}
 	private static THEME theme = THEME.GLASS;

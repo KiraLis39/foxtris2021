@@ -63,7 +63,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 
 	public StartMenuFrame(GraphicsConfiguration grConf) {
 		super(grConf);		
-		Out.Print(StartMenuFrame.class, 0, "Building the StartMenu...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Building the StartMenu...");
 		
 		initialization();		
 		
@@ -96,7 +96,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 		FoxAudioProcessor.nextMusic();
 		
 		repTh = new Thread(() -> {
-			Out.Print(StartMenuFrame.class, 0, "Launch draw-thread...");
+			Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Launch draw-thread...");
 			while (repThRun) {
 				if (bs == null || canvas == null) {return;}
 
@@ -123,15 +123,15 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 				} else {try {Thread.sleep(24);} catch (InterruptedException e) {}}
 			}
 
-			Out.Print(StartMenuFrame.class, 0, "Draw-thread has stop correctly.");
+			Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Draw-thread has stop correctly.");
 		});
 		repTh.start();	
 		
-		Out.Print(StartMenuFrame.class, 0, "StartMenu was been builded.");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "StartMenu was been builded.");
 	}
 
 	private void initialization() {
-		Out.Print(StartMenuFrame.class, 0, "Initialization StartMenu...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Initialization StartMenu...");
 		
 		try {sp = FoxSpritesCombiner.addSpritelist("MBSL", ResManager.getBImage("MBSL", true, MainClass.getGraphicConfig()), 3, 3);
 		} catch (Exception e) {e.printStackTrace();}
@@ -152,7 +152,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 
 	private void deInitialization() {
 		IOM.saveAll();
-		Out.Print(StartMenuFrame.class, 1, "De-inititialization of the StartMenuFrame...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.INFO, "De-inititialization of the StartMenuFrame...");
 		
 		repTh.interrupt();
 		sp = null;
@@ -162,12 +162,12 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 
 		FoxAudioProcessor.stopMusic();
 		dispose();
-		Out.Print(StartMenuFrame.class, 1, "De-inititialization accomlish. Lets GC...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.INFO, "De-inititialization accomlish. Lets GC...");
 		System.gc();
 	}
 	
 	private void createBackBuffer() {
-		Out.Print(StartMenuFrame.class, 0, "Creating the BackBuffer...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Creating the BackBuffer...");
 		
 		RenderingHints d2DRender = new RenderingHints(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
 		d2DRender.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE));
@@ -225,7 +225,7 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	
 		g2D.dispose();
 		
-		Out.Print(StartMenuFrame.class, 0, "BackBuffer was created succefull.");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "BackBuffer was created succefull.");
 	}
 	
 	private void changeUser() {

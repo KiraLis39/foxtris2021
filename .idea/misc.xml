@@ -5,6 +5,8 @@
       <list>
         <option value="$PROJECT_DIR$/../FoxLib/FoxLib39/FoxOut/pom.xml" />
         <option value="$PROJECT_DIR$/../FoxLib/FoxLib39/FoxGUI/pom.xml" />
+        <option value="$PROJECT_DIR$/../../FoxGUI/pom.xml" />
+        <option value="$PROJECT_DIR$/../../FoxOut/pom.xml" />
       </list>
     </option>
   </component>

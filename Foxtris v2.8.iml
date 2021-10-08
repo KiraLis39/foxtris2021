@@ -15,7 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="library" name="JLayer1.0.1.39" level="project" />
-    <orderEntry type="module" module-name="FoxGUI" />
     <orderEntry type="module" module-name="FoxOut" />
+    <orderEntry type="module" module-name="FoxGUI" />
   </component>
 </module>
