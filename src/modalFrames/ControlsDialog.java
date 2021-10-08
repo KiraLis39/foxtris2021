@@ -1,5 +1,11 @@
 package modalFrames;
 
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
+import gui.game.GameFrame;
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -22,30 +27,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-
-
-@SuppressWarnings("serial")
-public class ControlsDialog extends JDialog implements ActionListener  {	
+public class ControlsDialog extends JDialog implements ActionListener  {
 	private int DIALOG_WIDTH = 300, DIALOG_HEIGHT = 400;
-	private FoxFontBuilder ffb = new FoxFontBuilder();
-	private Font f0 = ffb.setFoxFont(5, 18, true);
-	private Font f1 = ffb.setFoxFont(5, 18, true);
+	private Font f0 = FoxFontBuilder.setFoxFont(5, 18, true);
+	private Font f1 = FoxFontBuilder.setFoxFont(5, 18, true);
 	private static Dialog pak;
 	
 	
 	public ControlsDialog(Dialog parent) {
 		super(parent, true);
-		
-//		try {UIManager.setLookAndFeel(new NimbusLookAndFeel());
-//		} catch (Exception e) {System.err.println("Couldn't get specified look and feel, for some reason.");}
+
 		Out.Print(ControlsDialog.class, 0, "Building the ControlsDialog...");
 		
 		setTitle("Окно управления:");
-		try {setIconImage(ResourceManager.getBufferedImage("gameIcon"));
+		try {setIconImage(ResManager.getBImage("gameIcon"));
 		} catch (Exception e) {e.printStackTrace();}
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setModal(true);
@@ -66,15 +61,15 @@ public class ControlsDialog extends JDialog implements ActionListener  {
 						setForeground(Color.WHITE);
 						setFont(f0);
 						
-						add(controlLine("KEY_LEFT", 	"Влево:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT_MOD")));
-						add(controlLine("KEY_RIGHT", 	"Вправо:", IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT_MOD")));
-						add(controlLine("KEY_DOWN", 	"Вниз:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN"),  	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN_MOD")));
-						add(controlLine("KEY_STUCK", 	"Сброс:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK_MOD")));
+						add(controlLine("KEY_LEFT", 	"Влево:", IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_LEFT_MOD")));
+						add(controlLine("KEY_RIGHT", 	"Вправо:", IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT"), IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_RIGHT_MOD")));
+						add(controlLine("KEY_DOWN", 	"Вниз:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN"),  IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_DOWN_MOD")));
+						add(controlLine("KEY_STUCK", 	"Сброс:", IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK"), IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_STUCK_MOD")));
 						
-						add(controlLine("KEY_ROTATE", 		"Поворот:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE"), 		IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE_MOD")));
-						add(controlLine("KEY_PAUSE", 			"Пауза:", 		IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE"), 			IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE_MOD")));
+						add(controlLine("KEY_ROTATE", 		"Поворот:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_ROTATE_MOD")));
+						add(controlLine("KEY_PAUSE", 			"Пауза:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE"), 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_PAUSE_MOD")));
 						add(controlLine("KEY_CONSOLE", 	"Консоль:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_CONSOLE"), 		IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_CONSOLE_MOD")));
-						add(controlLine("KEY_FULLSCREEN", "Экран:", 	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_FULLSCREEN"),IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_FULLSCREEN_MOD")));
+						add(controlLine("KEY_FULLSCREEN", "Экран:", 		IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_FULLSCREEN"),	IOM.getInt(IOM.HEADERS.USER_SAVE, "KEY_FULLSCREEN_MOD")));
 					}
 
 					private Component controlLine(String name, String description, int key, int mod) {
@@ -246,7 +241,8 @@ public class ControlsDialog extends JDialog implements ActionListener  {
 			IOM.saveAll();
 			pak.dispose();
 			
-			if (gui.GameFrame.isGameActive()) {gui.GameFrame.reloadControls();}
+			if (GameFrame.isGameActive()) {
+                GameFrame.reloadControls();}
 		}
 	}
 }

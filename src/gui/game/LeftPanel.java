@@ -1,4 +1,4 @@
-package subPanels;
+package gui.game;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -14,34 +14,27 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-import fox.games.FoxSpritesCombiner;
-import gui.GameFrame;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
+import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
 import modalFrames.AboutDialog;
-import modalFrames.OptionsDialog;
 import registry.Registry;
+import subComponents.OptionsDialog;
 
 
-@SuppressWarnings("serial")
 public class LeftPanel extends JPanel implements MouseListener {
-	private FoxSpritesCombiner sprites = new FoxSpritesCombiner();
-	
-	private BufferedImage hardcoreBufferIco, hardcoreBufferIco_off, specialBufferIco, specialBufferIco_off, nextBufferIco, nextBufferIco_off, 
-		lightModeIco, lightModeIco_off, autoMusicChangeIco, autoMusicChangeIco_off;
+	private BufferedImage hardcoreBufferIco, hardcoreBufferIco_off, specialBufferIco, specialBufferIco_off, nextBufferIco;
+	private BufferedImage nextBufferIco_off, lightModeIco, lightModeIco_off, autoMusicChangeIco, autoMusicChangeIco_off;
 	private BufferedImage buttonBufferIm, buttonOverBufferIm, buttonPressBufferIm, leftGrayBase, stage;
 	private BufferedImage[] sp;
 	
-	private Boolean exitButOver = false, exitButPress = false, musButOver = false, musButPress = false, 	optButOver = false, optButPress = false,	
-			aboButOver = false, aboButPress = false;
+	private Boolean exitButOver = false, exitButPress = false, musButOver = false, musButPress = false;
+	private Boolean optButOver = false, optButPress = false, aboButOver = false, aboButPress = false;
 	
 	public static int nextbrickDim;
 	
@@ -62,20 +55,14 @@ public class LeftPanel extends JPanel implements MouseListener {
 		leftButtonsPane.setPreferredSize(new Dimension(0, (int) (GameFrame.getGameFrameSize().getHeight() / 6f)));
 		
 		prepareBaseImageBuffers();
-		rebuildFonts();
 	}
-	
-	private void rebuildFonts() {
-		Registry.simpleFontB = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
-		Registry.simpleFont = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
-	}
-	
+
 	public LeftPanel() {
 		setLayout(new BorderLayout());
 		setIgnoreRepaint(true);
 		setOpaque(false);
 		
-		initializateLeftPanel();
+		initializeLeftPanel();
 		
 		leftNFigurePane = new JPanel(new BorderLayout()) {
 			{
@@ -247,17 +234,14 @@ public class LeftPanel extends JPanel implements MouseListener {
 						setFocusPainted(false);
 						setFocusable(false);
 						addMouseListener(LeftPanel.this);
-						addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								FoxAudioProcessor.playSound("clickSound", 3D);
-								
-								new OptionsDialog(GameFrame.getFrame()).setVisible(true);
+						addActionListener(e -> {
+							FoxAudioProcessor.playSound("clickSound", 3D);
 
-								Out.Print("Out of pause...");
-								GameFrame.setPaused(false);
-								IOM.saveAll();
-							}
+							new OptionsDialog(GameFrame.getFrame()).setVisible(true);
+
+							Out.Print("Out of pause...");
+							GameFrame.setPaused(false);
+							IOM.saveAll();
 						});
 					}
 				};
@@ -326,36 +310,35 @@ public class LeftPanel extends JPanel implements MouseListener {
 		g2D.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 	}
 	
-	private void initializateLeftPanel() {
-		try {sp = sprites.addSpritelist("numbers", ResourceManager.getBufferedImage("numbers", true, MainClass.getGraphicConfig()), 10, 1);
+	private void initializeLeftPanel() {
+		try {sp = FoxSpritesCombiner.addSpritelist("numbers", ResManager.getBImage("numbers", true, MainClass.getGraphicConfig()), 10, 1);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		grayRectangleReDraw();
-		prepareBaseImageBuffers();		
-		rebuildFonts();
+		prepareBaseImageBuffers();
 	}
 
 	private void prepareBaseImageBuffers() {
 		try {
-			stage							= ResourceManager.getBufferedImage("stageLabel", true, MainClass.getGraphicConfig());
-			buttonBufferIm 			= ResourceManager.getBufferedImage("buttonProto", true, MainClass.getGraphicConfig());
-			buttonOverBufferIm 		= ResourceManager.getBufferedImage("buttonProtoOver", true, MainClass.getGraphicConfig());
-			buttonPressBufferIm		= ResourceManager.getBufferedImage("buttonProtoPress", true, MainClass.getGraphicConfig());
+			stage					= ResManager.getBImage("stageLabel", true, MainClass.getGraphicConfig());
+			buttonBufferIm 			= ResManager.getBImage("buttonProto", true, MainClass.getGraphicConfig());
+			buttonOverBufferIm 		= ResManager.getBImage("buttonProtoOver", true, MainClass.getGraphicConfig());
+			buttonPressBufferIm		= ResManager.getBImage("buttonProtoPress", true, MainClass.getGraphicConfig());
 			
-			hardcoreBufferIco 		= ResourceManager.getBufferedImage("hardcore", true, MainClass.getGraphicConfig());
-			hardcoreBufferIco_off 	= ResourceManager.getBufferedImage("hardcore_off", true, MainClass.getGraphicConfig());
+			hardcoreBufferIco 		= ResManager.getBImage("hardcore", true, MainClass.getGraphicConfig());
+			hardcoreBufferIco_off 	= ResManager.getBImage("hardcore_off", true, MainClass.getGraphicConfig());
 			
-			specialBufferIco 			= ResourceManager.getBufferedImage("spec", true, MainClass.getGraphicConfig());
-			specialBufferIco_off 		= ResourceManager.getBufferedImage("spec_off", true, MainClass.getGraphicConfig());
+			specialBufferIco 		= ResManager.getBImage("spec", true, MainClass.getGraphicConfig());
+			specialBufferIco_off 	= ResManager.getBImage("spec_off", true, MainClass.getGraphicConfig());
 			
-			nextBufferIco 				= ResourceManager.getBufferedImage("tips", true, MainClass.getGraphicConfig());
-			nextBufferIco_off 		= ResourceManager.getBufferedImage("tips_off", true, MainClass.getGraphicConfig());
+			nextBufferIco 			= ResManager.getBImage("tips", true, MainClass.getGraphicConfig());
+			nextBufferIco_off 		= ResManager.getBImage("tips_off", true, MainClass.getGraphicConfig());
 			
-			lightModeIco 				= ResourceManager.getBufferedImage("lightcore", true, MainClass.getGraphicConfig());
-			lightModeIco_off 			= ResourceManager.getBufferedImage("lightcore_off", true, MainClass.getGraphicConfig());
+			lightModeIco 			= ResManager.getBImage("lightcore", true, MainClass.getGraphicConfig());
+			lightModeIco_off 		= ResManager.getBImage("lightcore_off", true, MainClass.getGraphicConfig());
 			
-			autoMusicChangeIco 	= ResourceManager.getBufferedImage("autoMusic", true, MainClass.getGraphicConfig());
-			autoMusicChangeIco_off = ResourceManager.getBufferedImage("autoMusic_off", true, MainClass.getGraphicConfig());
+			autoMusicChangeIco 		= ResManager.getBImage("autoMusic", true, MainClass.getGraphicConfig());
+			autoMusicChangeIco_off 	= ResManager.getBImage("autoMusic_off", true, MainClass.getGraphicConfig());
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -369,8 +352,6 @@ public class LeftPanel extends JPanel implements MouseListener {
 		g2D.fillRoundRect(0, 0, 600, 600, 20, 20);
 		
 		g2D.dispose();
-		
-		rebuildFonts();
 	}
 
 	private void drawGrayBack(JPanel panel, Graphics2D g2D) {
@@ -406,29 +387,22 @@ public class LeftPanel extends JPanel implements MouseListener {
 				g2D.drawString(buttonText, 
 						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
 						button.getHeight() / 2 + 4 + y);
-			} else if (over) {
-				g2D.drawImage(buttonOverBufferIm, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);			
-				g2D.setColor(Color.DARK_GRAY);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2), 
-						button.getHeight() / 2 + 2 + y);
-				
-				g2D.setColor(Color.WHITE);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
-						button.getHeight() / 2 + 4 + y
-				);
 			} else {
-				g2D.drawImage(buttonBufferIm, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);				
-				g2D.setColor(Color.DARK_GRAY);				
-				g2D.drawString(buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2), 
+				BufferedImage bdi = buttonBufferIm;
+				if (over) {
+					bdi = buttonOverBufferIm;
+				}
+
+				g2D.drawImage(bdi, x + 2, y, button.getWidth() - x * 2 - 2, button.getHeight() - 3, null);
+				g2D.setColor(Color.DARK_GRAY);
+				g2D.drawString(buttonText,
+						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2 - 2),
 						button.getHeight() / 2 + 2 + y);
-				
-				g2D.setColor(Color.WHITE);				
+
+				g2D.setColor(Color.WHITE);
 				g2D.drawString(
-						buttonText, 
-						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2), 
+						buttonText,
+						(int) (button.getWidth() / 2 - textBounds.getWidth() / 2),
 						button.getHeight() / 2 + 4 + y
 				);
 			}
@@ -498,9 +472,8 @@ public class LeftPanel extends JPanel implements MouseListener {
 	}
 	public void mouseClicked(MouseEvent e) {}
 
-	public void setNextbrickDim(int nbd) {
+	public void setNextBrickDim(int nbd) {
 		nextbrickDim = nbd;
-		
 		leftNFigurePane.repaint();
 	}
 }

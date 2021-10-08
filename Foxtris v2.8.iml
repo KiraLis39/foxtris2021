@@ -14,17 +14,7 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
-      <library name="JLayer1.0.1.jar">
-        <CLASSES>
-          <root url="file://lib/JLayer1.0.1.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://lib/src/JLayer1.0.1/javazoom.zip" />
-        </SOURCES>
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="JLayer1.0.1.39" level="project" />
     <orderEntry type="module" module-name="FoxOut" />
     <orderEntry type="module" module-name="FoxGUI" />
   </component>

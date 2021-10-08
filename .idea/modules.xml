@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../FoxLib/FoxLib39/FoxGUI/FoxGUI.iml" filepath="$PROJECT_DIR$/../FoxLib/FoxLib39/FoxGUI/FoxGUI.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../FoxLib/FoxLib39/FoxOut/FoxOut.iml" filepath="$PROJECT_DIR$/../FoxLib/FoxLib39/FoxOut/FoxOut.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../FoxGUI/FoxGUI.iml" filepath="$PROJECT_DIR$/../../FoxGUI/FoxGUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../FoxOut/FoxOut.iml" filepath="$PROJECT_DIR$/../../FoxOut/FoxOut.iml" />
       <module fileurl="file://$PROJECT_DIR$/Foxtris v2.8.iml" filepath="$PROJECT_DIR$/Foxtris v2.8.iml" />
     </modules>
   </component>

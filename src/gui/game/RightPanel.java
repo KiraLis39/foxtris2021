@@ -1,4 +1,4 @@
-package subPanels;
+package gui.game;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -9,28 +9,24 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-import gui.GameFrame;
-import gui.GameFrame.KeyLabel;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.ResManager;
+import gui.game.GameFrame.KeyLabel;
 import registry.Registry;
 
-
-@SuppressWarnings("serial")
 public class RightPanel extends JPanel {
 	private JPanel rightInfosPane;
 	
-	private static BufferedImage rightGrayBase, lifeHeartImage, bonusKristalImage;
+	private BufferedImage rightGrayBase, lifeHeartImage, bonusKristalImage;
 	private String tmpSpeed;
 	private static int allLinesDestroyCounter, bonusCounter;
 	private static Color panelColor = new Color(0.3f, 0.3f, 0.3f, 0.85f);
-
+	private static String userName;
 
 	@Override
-	 public void setPreferredSize(Dimension preferredSize) {
+	public void setPreferredSize(Dimension preferredSize) {
 		super.setPreferredSize(preferredSize);
 		revalidate();
 		repaint();
@@ -39,11 +35,13 @@ public class RightPanel extends JPanel {
 	 }
 	
 	public RightPanel() {
+		userName = IOM.getString(IOM.HEADERS.LAST_USER, "lastUser");
+
 		setLayout(new BorderLayout());
 		setIgnoreRepaint(true);
 		setOpaque(false);
 		
-		initializateRightPanel();
+		initializeRightPanel();
 		
 		float leftShift = 21f;
 		rightInfosPane = new JPanel(new BorderLayout()) {
@@ -77,7 +75,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				
 				float spacing = GameFrame.fontIncreaseMod * 2f;
-				float headerAlign = (float) (getWidth() / 2 - Registry.ffb.getStringBounds(g2D, "Управление:").getWidth() / 2D);
+				float headerAlign = (float) (getWidth() / 2 - FoxFontBuilder.getStringBounds(g2D, "Управление:").getWidth() / 2D);
 				
 				g2D.drawString("Управление:", headerAlign, spacing * 13f);
 				g2D.drawString("_________________", headerAlign, spacing * 14f);
@@ -139,7 +137,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				g2D.setColor(Color.BLACK);
 				
-				headerAlign = (float) (getWidth() / 2 - Registry.ffb.getStringBounds(g2D, "Информация:").getWidth() / 2D);
+				headerAlign = (float) (getWidth() / 2 - FoxFontBuilder.getStringBounds(g2D, "Информация:").getWidth() / 2D);
 				
 				g2D.drawString("Информация:", headerAlign, spacing * 114f);
 				g2D.drawString("__________________", headerAlign, spacing * 115f);
@@ -201,7 +199,7 @@ public class RightPanel extends JPanel {
 				g2D.setFont(Registry.simpleFontB);
 				g2D.drawString("Игрок:", leftShift, getHeight() - 70);
 				g2D.setFont(Registry.simpleFont);
-				g2D.drawString(IOM.getString(IOM.HEADERS.LAST_USER, "lastUser"),
+				g2D.drawString(userName,
 						84 * GameFrame.fontIncreaseMod, getHeight() - 70);				
 				
 				
@@ -232,20 +230,15 @@ public class RightPanel extends JPanel {
 		g2D.drawRoundRect(6, 6, panel.getWidth() - 12, panel.getHeight() - 12, 10, 10);
 	}
 
-	private void initializateRightPanel() {
+	private void initializeRightPanel() {
 		grayRectangleReDraw();
 		prepareBaseImageBuffers();
 	}
 
-	public static void rebuildFonts() {
-		Registry.simpleFontB = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), true);
-		Registry.simpleFont = Registry.ffb.setFoxFont(FoxFontBuilder.FONT.CAMBRIA, 14 * (GameFrame.fontIncreaseMod), false);
-	}
-
 	private void prepareBaseImageBuffers() {
 		try {			
-			lifeHeartImage				= ResourceManager.getBufferedImage("life", true, MainClass.getGraphicConfig());
-			bonusKristalImage		= ResourceManager.getBufferedImage("bonus", true, MainClass.getGraphicConfig());
+			lifeHeartImage		= ResManager.getBImage("life", true, MainClass.getGraphicConfig());
+			bonusKristalImage	= ResManager.getBImage("bonus", true, MainClass.getGraphicConfig());
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -259,8 +252,6 @@ public class RightPanel extends JPanel {
 		g2D.fillRoundRect(0, 0, 600, 600, 20, 20);
 		
 		g2D.dispose();
-		
-		rebuildFonts();
 	}
 	
 	public static void addOneDestroyLine() {allLinesDestroyCounter++;}

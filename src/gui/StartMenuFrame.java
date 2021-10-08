@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
@@ -21,21 +20,22 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import door.ExitClass;
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.ResourceManager;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
+import gui.game.CenterPanel;
+import gui.game.GameFrame;
+import images.FoxSpritesCombiner;
 import media.FoxAudioProcessor;
-import modalFrames.OptionsDialog;
 import registry.Registry;
-import subPanels.CenterPanel;
+import subComponents.OptionsDialog;
 
 
-@SuppressWarnings("serial")
 public class StartMenuFrame extends JFrame implements MouseListener, MouseMotionListener {
 	private final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
 	
@@ -50,8 +50,8 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	private Point cursor, startButtonPaint;
 
 	private Color colorBackground = new Color(0.3f, 0.3f, 0.3f, 1.0f);
-	private Font f0 = Registry.ffb.setFoxFont(6, 21, false);
-	private Font f1 = Registry.ffb.setFoxFont(5, 20, true);
+	private Font f0 = FoxFontBuilder.setFoxFont(6, 21, false);
+	private Font f1 = FoxFontBuilder.setFoxFont(5, 20, true);
 
 	private Thread repTh;
 
@@ -63,12 +63,12 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 
 	public StartMenuFrame(GraphicsConfiguration grConf) {
 		super(grConf);		
-		Out.Print(StartMenuFrame.class, 0, "Building the StartMenu...");		
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Building the StartMenu...");
 		
 		initialization();		
 		
-		setTitle("Меню игры:");
-		try {setIconImage(ResourceManager.getBufferedImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
+		setTitle(Registry.name);
+		try {setIconImage(ResManager.getBImage("gameIcon", true, MainClass.getGraphicConfig()));} catch (Exception e1) {/* IGNORE */}
 		setResizable(false);
 		setIgnoreRepaint(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,48 +95,45 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 		
 		FoxAudioProcessor.nextMusic();
 		
-		repTh = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Out.Print(StartMenuFrame.class, 0, "Launch draw-thread...");
-				while (repThRun) {
-					if (bs == null || canvas == null) {return;}
-					
-					Graphics2D g2D = (Graphics2D) bs.getDrawGraphics();
-					
-					try {
+		repTh = new Thread(() -> {
+			Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Launch draw-thread...");
+			while (repThRun) {
+				if (bs == null || canvas == null) {return;}
+
+				Graphics2D g2D = (Graphics2D) bs.getDrawGraphics();
+
+				try {
+					do {
 						do {
-				    		do {
-				    			g2D = (Graphics2D) bs.getDrawGraphics();
-								g2D.drawImage(background, 0, 0, FRAME_WIDTH - 16, FRAME_HEIGHT - 40, null);
-								g2D.drawImage(startPress 	? sp[8] : startOver 		? sp[7] : sp[6], startButtonPaint.x, startButtonPaint.y, tmpInt0, tmpInt1 + 64, 0, 0, 512, 64, null);
-								g2D.drawImage(optionsPress 	? sp[5] : optionsOver 	? sp[4] : sp[3], startButtonPaint.x, startButtonPaint.y + 84, tmpInt0, tmpInt1 + 148, 0, 0, 512, 64, null);
-								g2D.drawImage(exitPress 		? sp[2] : exitOver 			? sp[1]	 : sp[0], startButtonPaint.x, startButtonPaint.y + 168, tmpInt0, tmpInt1 + 232, 0, 0, 512, 64, null);
-				    		} while (bs.contentsRestored());
-				    	} while (bs.contentsLost());
-						
-				    	bs.show();
-					} catch (Exception e) {/* IGNORE */} finally {g2D.dispose();}
-			    	
-					Toolkit.getDefaultToolkit().sync();
-					
-					if (descret <= 60) {try {Thread.sleep(33);} catch (InterruptedException e) {}
-					} else if (descret <= 72) {try {Thread.sleep(30);} catch (InterruptedException e) {}
-					} else {try {Thread.sleep(24);} catch (InterruptedException e) {}}
-				}
-				
-				Out.Print(StartMenuFrame.class, 0, "Draw-thread has stop correctly.");
+							g2D = (Graphics2D) bs.getDrawGraphics();
+							g2D.drawImage(background, 0, 0, null);
+							g2D.drawImage(startPress 	? sp[8] : startOver 	? sp[7] : sp[6], startButtonPaint.x, startButtonPaint.y, tmpInt0, tmpInt1 + 64, 0, 0, 512, 64, null);
+							g2D.drawImage(optionsPress 	? sp[5] : optionsOver 	? sp[4] : sp[3], startButtonPaint.x, startButtonPaint.y + 84, tmpInt0, tmpInt1 + 148, 0, 0, 512, 64, null);
+							g2D.drawImage(exitPress 	? sp[2] : exitOver 		? sp[1]	: sp[0], startButtonPaint.x, startButtonPaint.y + 168, tmpInt0, tmpInt1 + 232, 0, 0, 512, 64, null);
+						} while (bs.contentsRestored());
+					} while (bs.contentsLost());
+
+					bs.show();
+				} catch (Exception e) {/* IGNORE */} finally {g2D.dispose();}
+
+				Toolkit.getDefaultToolkit().sync();
+
+				if (descret <= 60) {try {Thread.sleep(33);} catch (InterruptedException e) {}
+				} else if (descret <= 72) {try {Thread.sleep(30);} catch (InterruptedException e) {}
+				} else {try {Thread.sleep(24);} catch (InterruptedException e) {}}
 			}
+
+			Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Draw-thread has stop correctly.");
 		});
 		repTh.start();	
 		
-		Out.Print(StartMenuFrame.class, 0, "StartMenu was been builded.");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "StartMenu was been builded.");
 	}
 
 	private void initialization() {
-		Out.Print(StartMenuFrame.class, 0, "Initialization StartMenu...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Initialization StartMenu...");
 		
-		try {sp = Registry.sprites.addSpritelist("MainMenuButtons", ResourceManager.getBufferedImage("MBSL", true, MainClass.getGraphicConfig()), 3, 3);
+		try {sp = FoxSpritesCombiner.addSpritelist("MBSL", ResManager.getBImage("MBSL", true, MainClass.getGraphicConfig()), 3, 3);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		startButtonPaint = new Point(FRAME_WIDTH / 4, FRAME_HEIGHT / 3);
@@ -154,7 +151,8 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	}
 
 	private void deInitialization() {
-		Out.Print(StartMenuFrame.class, 1, "De-inititialization of the StartMenuFrame...");
+		IOM.saveAll();
+		Out.Print(StartMenuFrame.class, Out.LEVEL.INFO, "De-inititialization of the StartMenuFrame...");
 		
 		repTh.interrupt();
 		sp = null;
@@ -162,49 +160,49 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 		background = null;
 		canvas = null;
 
+		FoxAudioProcessor.stopMusic();
 		dispose();
-		Out.Print(StartMenuFrame.class, 1, "De-inititialization accomlish. Lets GC...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.INFO, "De-inititialization accomlish. Lets GC...");
 		System.gc();
 	}
 	
 	private void createBackBuffer() {
-		Out.Print(StartMenuFrame.class, 0, "Creating the BackBuffer...");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "Creating the BackBuffer...");
 		
 		RenderingHints d2DRender = new RenderingHints(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
 		d2DRender.add(new RenderingHints(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE));
 		d2DRender.add(new RenderingHints(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON));
-		
-//		buffBackground = ResourceManager.getBufferedImage("mainBackground", true, MainClass.getGraphicConfig());
-		Image imIc = new ImageIcon("./resourse/pictures/mainBackground").getImage();
-		background = MainClass.getGraphicConfig().createCompatibleVolatileImage(imIc.getWidth(null), imIc.getHeight(null), 2);
+
+		BufferedImage buffBackground = ResManager.getBImage("mainBackground", true, MainClass.getGraphicConfig());
+		background = MainClass.getGraphicConfig().createCompatibleVolatileImage(buffBackground.getWidth(), buffBackground.getHeight(), 2);
 		if (background.validate(MainClass.getGraphicConfig()) == VolatileImage.IMAGE_INCOMPATIBLE) {Out.Print("WARN: createBackBuffer: IMAGE_INCOMPATIBLE");}
 		
-		Graphics2D g2D = (Graphics2D) background.createGraphics();
+		Graphics2D g2D = background.createGraphics();
 		g2D.addRenderingHints(d2DRender);
 		
-		g2D.drawImage(imIc, 0, 0, canvas);
+		g2D.drawImage(buffBackground, 0, 0, canvas);
 
 		g2D.setStroke(new BasicStroke(3.0f));
 		g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
 		
 		g2D.setColor(Color.GRAY);
-		g2D.fillRoundRect(startButtonPaint.x - 7, startButtonPaint.y - 6, 431, 277, 25, 25);
+		g2D.fillRoundRect(startButtonPaint.x - 7, startButtonPaint.y - 6, background.getWidth() / 2 + 14, 245, 25, 25);
 		
 		g2D.setColor(Color.BLACK);
-		g2D.drawRoundRect(startButtonPaint.x - 2, startButtonPaint.y, 420, 266, 25, 25);
+		g2D.drawRoundRect(startButtonPaint.x - 2, startButtonPaint.y, background.getWidth() / 2 + 3, 235, 25, 25);
 		
 		g2D.setFont(f0);
 		fm = g2D.getFontMetrics();
 		g2D.setColor(Color.WHITE);
 		g2D.drawString("v" + Registry.verse, 20, 40);		
-		g2D.drawString("Multiverse_39 @FoxGroup, 2020", getWidth() - 330, getHeight() - 20);
+		g2D.drawString("Multiverse_39 @FoxGroup, 2021", background.getWidth() - 360, background.getHeight() - 16);
 		
 		
 		g2D.setColor(Color.GRAY);
-		g2D.fillRoundRect(startButtonPaint.x - 7, startButtonPaint.y / 3, 431, 90, 25, 25);
+		g2D.fillRoundRect(startButtonPaint.x - 7, startButtonPaint.y / 3, background.getWidth() / 2 + 14, 90, 28, 28);
 		
 		g2D.setColor(Color.DARK_GRAY);
-		g2D.drawRoundRect(startButtonPaint.x - 2, startButtonPaint.y / 3 + 10, 420, 75, 25, 25);
+		g2D.drawRoundRect(startButtonPaint.x - 2, startButtonPaint.y / 3 + 7, background.getWidth() / 2 + 3, 78, 24, 24);
 		
 		g2D.setFont(f1);
 		fm = g2D.getFontMetrics();
@@ -227,17 +225,19 @@ public class StartMenuFrame extends JFrame implements MouseListener, MouseMotion
 	
 		g2D.dispose();
 		
-		Out.Print(StartMenuFrame.class, 0, "BackBuffer was created succefull.");
+		Out.Print(StartMenuFrame.class, Out.LEVEL.DEBUG, "BackBuffer was created succefull.");
 	}
 	
 	private void changeUser() {
 		String newUserName = JOptionPane.showInputDialog(
 				this, "Как тебя зовут?", "Новый игрок:", 
 				JOptionPane.QUESTION_MESSAGE);		
-		if (newUserName == null || newUserName.equals("")) {return;
+		if (newUserName == null || newUserName.isBlank()) {
+			return;
 		} else {
-			IOM.set(IOM.HEADERS.LAST_USER, "lastUser", newUserName);			
-			deInitialization();			
+			IOM.set(IOM.HEADERS.LAST_USER, "lastUser", newUserName);
+
+			deInitialization();
 			new StartMenuFrame(MainClass.getGraphicConfig());
 		}
 	}

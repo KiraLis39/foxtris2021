@@ -1,39 +1,33 @@
-package subPanels;
+package gui.game;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JPanel;
-
 import door.MainClass;
-import fox.adds.IOM;
-import fox.adds.Out;
-import fox.builders.FoxFontBuilder;
-import fox.builders.ResourceManager;
-import gui.GameFrame;
+import fox.FoxFontBuilder;
+import fox.IOM;
+import fox.Out;
+import fox.ResManager;
 import media.FoxAudioProcessor;
 
-
-@SuppressWarnings("serial")
 public class CenterPanel extends JPanel {
-	private enum Movings {DOWN, LEFT, RIGHT}
-	
+	private enum Movings {DOWN, LEFT, RIGHT;}
+
 	private static int LINES_COUNT, COLUMN_COUNT;
 	private static Random r = new Random();
-	
+
 	private BufferedImage victoryLabelBuffer, gameoverLabelBuffer, pauseLabelBuffer, finalWinLabelBuffer;
-	public static BufferedImage proto, NoneOneBrick, GreenOneBrick, OrangeOneBrick, PurpleOneBrick, YellowOneBrick, BlueOneBrick, 
-		RedOneBrick, BlackOneBrick;
-	
+	public static BufferedImage proto, NoneOneBrick, GreenOneBrick, OrangeOneBrick, PurpleOneBrick, YellowOneBrick, BlueOneBrick,
+	RedOneBrick, BlackOneBrick;
+
 	private static String currentFiguresName = "", currentFiguresNameOver = "";
-	
+
+	private Font f0 = FoxFontBuilder.setFoxFont(0, 34, true);
+
 	public static int brickDim;
 	private int tipLifeTime = 7;
 	private static int balls, bombDestroyLineMarker = -1, fullLineCheck, startX, startY, linesDestroy;
@@ -116,10 +110,10 @@ public class CenterPanel extends JPanel {
 //		LeftPanel.grayRectangleReDraw();
 		
 		try {
-			victoryLabelBuffer 		= ResourceManager.getBufferedImage("victoryImage", true, MainClass.getGraphicConfig());
-			gameoverLabelBuffer 	= ResourceManager.getBufferedImage("gameoverImage", true, MainClass.getGraphicConfig());
-			pauseLabelBuffer 		= ResourceManager.getBufferedImage("pauseImage", true, MainClass.getGraphicConfig());
-			finalWinLabelBuffer 	= ResourceManager.getBufferedImage("finalWinImage", true, MainClass.getGraphicConfig());
+			victoryLabelBuffer 		= ResManager.getBImage("victoryImage", true, MainClass.getGraphicConfig());
+			gameoverLabelBuffer 	= ResManager.getBImage("gameoverImage", true, MainClass.getGraphicConfig());
+			pauseLabelBuffer 		= ResManager.getBImage("pauseImage", true, MainClass.getGraphicConfig());
+			finalWinLabelBuffer 	= ResManager.getBImage("finalWinImage", true, MainClass.getGraphicConfig());
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -237,7 +231,7 @@ public class CenterPanel extends JPanel {
 		} else {
 			if (totalDestroyBonus) {
 				g2D.setColor(Color.DARK_GRAY);
-				g2D.setFont(new FoxFontBuilder().setFoxFont(0, 34, true));
+				g2D.setFont(FoxFontBuilder.setFoxFont(0, 34, true));
 				g2D.drawString(
 						"TOTAL DESTROY!", 
 						GameFrame.getGameFrameSize().width / 6 - 2 + tipLifeTime, 
@@ -245,7 +239,7 @@ public class CenterPanel extends JPanel {
 				);
 				
 				g2D.setColor(Color.RED);
-				g2D.setFont(new FoxFontBuilder().setFoxFont(0, 34, true));
+				g2D.setFont(f0);
 				g2D.drawString(
 						"TOTAL DESTROY!", 
 						GameFrame.getGameFrameSize().width / 6 + tipLifeTime, 
@@ -255,11 +249,11 @@ public class CenterPanel extends JPanel {
 			
 			if (powerfullDamageBonus) {
 				g2D.setColor(Color.DARK_GRAY);
-				g2D.setFont(new FoxFontBuilder().setFoxFont(0, 34, true));
+				g2D.setFont(FoxFontBuilder.setFoxFont(0, 34, true));
 				g2D.drawString("POWERFULL!!!", GameFrame.getGameFrameSize().width / 6 - 2 + tipLifeTime, GameFrame.getGameFrameSize().height / 2 + 2 + tipLifeTime);
 				
 				g2D.setColor(Color.RED);
-				g2D.setFont(new FoxFontBuilder().setFoxFont(0, 34, true));
+				g2D.setFont(f0);
 				g2D.drawString("POWERFULL!!!", GameFrame.getGameFrameSize().width / 6 + tipLifeTime, GameFrame.getGameFrameSize().height / 2 + tipLifeTime);
 			}
 		}
@@ -564,24 +558,21 @@ public class CenterPanel extends JPanel {
 	private static void checkLines() {
 		int line = 0, column = 0;
 		ExecutorService aniPool = Executors.newFixedThreadPool(1);
-		Runnable rn = new Runnable() {
-			@Override
-			public void run() {
-				try {while (!aniPool.awaitTermination(30, TimeUnit.MILLISECONDS)) {GameFrame.basePane.repaint();}} catch (InterruptedException e) {e.printStackTrace();}
-				
-				//bonus check:
-				if (linesDestroy >= 3) {
-					RightPanel.bonusCounterAdd();
-					FoxAudioProcessor.playSound("achiveSound", 0.5D);
-					balls += 10;
-					bonusAchieved = true;
-					powerfullDamageBonus = true;
-				}
-				
-				animationOn = false;
-				cleanFieldCheck();
-				checkWin();
+		Runnable rn = () -> {
+			try {while (!aniPool.awaitTermination(30, TimeUnit.MILLISECONDS)) {GameFrame.basePane.repaint();}} catch (InterruptedException e) {e.printStackTrace();}
+
+			//bonus check:
+			if (linesDestroy >= 3) {
+				RightPanel.bonusCounterAdd();
+				FoxAudioProcessor.playSound("achiveSound", 0.5D);
+				balls += 10;
+				bonusAchieved = true;
+				powerfullDamageBonus = true;
 			}
+
+			animationOn = false;
+			cleanFieldCheck();
+			checkWin();
 		};
 		linesDestroy = 0;
 		fullLineCheck = 0;
